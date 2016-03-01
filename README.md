@@ -1,3 +1,5 @@
+[![Build Status](https://jenkins.sci.utah.edu/job/check-manifest/badge/icon)](https://jenkins.sci.utah.edu/job)
+
 Table of Contents
 =================
 
