@@ -282,3 +282,10 @@ ExternalProject_Add( Seg3D_external
   CMAKE_CACHE_ARGS ${SEG3D_CACHE_ARGS}
   INSTALL_COMMAND ""
 )
+
+IF(WIN32 AND MSVC)
+CONFIGURE_FILE (
+  "${SUPERBUILD_DIR}/WinBuild.bat.in"
+  "${CMAKE_BINARY_DIR}/WinBuild.bat"
+)
+ENDIF()
