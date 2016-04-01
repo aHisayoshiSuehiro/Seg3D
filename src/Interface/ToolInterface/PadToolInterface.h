@@ -26,28 +26,37 @@
  DEALINGS IN THE SOFTWARE.
 */
 
-#include <Testing/Utils/FilesystemPaths.h>
+#ifndef INTERFACE_TOOLINTERFACE_PADTOOLINTERFACE_H
+#define INTERFACE_TOOLINTERFACE_PADTOOLINTERFACE_H
 
-namespace Testing {
+#ifndef Q_MOC_RUN
 
-namespace Utils {    
+// Base class of the tool widget
+#include <Interface/Application/ToolWidget.h>
 
-boost::filesystem::path testOutputDir()
-{
-#ifdef BUILD_TESTING
-  return TEST_OUTPUT_PATH;
-#else
-  return boost::filesystem::path();
 #endif
-}
 
-boost::filesystem::path testInputDir()
+namespace Seg3D
 {
-#ifdef BUILD_TESTING
-  return TEST_INPUT_PATH;
-#else
-  return boost::filesystem::path();
-#endif
-}
 
-}}
+class PadToolInterfacePrivate;
+
+class PadToolInterface : public ToolWidget
+{
+Q_OBJECT
+
+// Constructor/destructor  
+public:
+  PadToolInterface();
+  virtual ~PadToolInterface();
+  virtual bool build_widget( QFrame* frame );
+
+private:
+    boost::shared_ptr < PadToolInterfacePrivate > private_;
+  
+};
+
+} // end namespace Seg3D
+
+
+#endif
