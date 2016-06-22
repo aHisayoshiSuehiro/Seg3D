@@ -13,6 +13,7 @@ matrix:
           packages:
             - qt5-qmake
             - qtbase5-dev
+            - qt5-default
             - libqt5core5a
             - libqt5widgets5
             - libqt5opengl5-dev
@@ -29,9 +30,12 @@ matrix:
 
 # check environment (copied from libgit2sharp)
 before_install:
-- date -u
-- uname -a
-- sudo apt-get update -qq
+  - date -u
+  - uname -a
+  - sudo apt-get update -qq
+
+after_install:
+  - sudo apt-file search Qt5CoreConfig.cmake
 
 script:
   - cd bin
