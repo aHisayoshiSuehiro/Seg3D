@@ -13,6 +13,7 @@ matrix:
           packages:
             - qt5-qmake
             - qtbase5-dev
+            - libqt5core5a
             - libqt5widgets5
             - libqt5opengl5-dev
 #    - os: linux
