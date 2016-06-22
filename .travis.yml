@@ -32,12 +32,11 @@ matrix:
 before_install:
   - date -u
   - uname -a
+  - sudo add-apt-repository ppa:beineri/opt-qt55 -y
   - sudo apt-get update -qq
 
-after_install:
-  - sudo apt-file search Qt5CoreConfig.cmake
-
 script:
+  - sudo apt-file search Qt5CoreConfig.cmake
   - cd bin
   - cmake -DBUILD_TESTING:BOOL=OFF ../Superbuild
   - make -j4 1> /dev/null
