@@ -38,6 +38,7 @@ before_install:
 
 script:
   - sudo apt-get -y install apt-file
+  - sudo apt-file update
   - sudo apt-file search Qt5CoreConfig.cmake
   - cd bin
   - cmake -DBUILD_TESTING:BOOL=OFF ../Superbuild
