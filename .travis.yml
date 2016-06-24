@@ -37,9 +37,9 @@ before_install:
   - uname -a
 
 script:
-  - sudo apt-get -y install apt-file
-  - sudo apt-file update
-  - sudo apt-file search Qt5CoreConfig.cmake
+#  - sudo apt-get -y install apt-file
+#  - sudo apt-file update
+#  - sudo apt-file search Qt5CoreConfig.cmake
   - cd bin
-  - cmake -DBUILD_TESTING:BOOL=OFF ../Superbuild
+  - cmake -DBUILD_TESTING:BOOL=OFF -DQt5_PATH:PATH=/usr/lib/x86_64-linux-gnu ../Superbuild
   - make -j4 1> /dev/null
