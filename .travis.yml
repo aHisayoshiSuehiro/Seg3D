@@ -42,5 +42,5 @@ script:
 #  - sudo apt-file update
 #  - sudo apt-file search Qt5CoreConfig.cmake
   - cd bin
-  - cmake -DBUILD_TESTING:BOOL=OFF -DBUILD_DOCUMENTATION:BOOL=OFF -DBUILD_MOSAIC_TOOLS:BOOL=OFF -DQt5_PATH:PATH=/usr/lib/x86_64-linux-gnu ../Superbuild
+  - cmake -DBUILD_TESTING:BOOL=OFF -DBUILD_DOCUMENTATION:BOOL=OFF -DBUILD_MOSAIC_TOOLS:BOOL=OFF -DBUILD_LARGE_VOLUME_TOOLS:BOOL=OFF -DQt5_PATH:PATH=/usr/lib/x86_64-linux-gnu ../Superbuild
   - make -j4 1> /dev/null
