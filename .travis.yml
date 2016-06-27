@@ -8,7 +8,7 @@ matrix:
       compiler: gcc
       cache:
         directories:
-          - bin/Externals
+          - $HOME/Seg3D/bin/Externals
 #      addons:
 #        apt:
 #          sources:
