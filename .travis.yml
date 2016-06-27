@@ -10,14 +10,14 @@ matrix:
         apt:
 #          sources:
 #            - ppa:beineri/opt-qt551-trusty
-          packages:
-            - qt5-qmake
-            - qtbase5-dev
-            - qt5-default
-            - libqt5core5a
-            - libqt5widgets5
-            - libqt5opengl5-dev
-            - libqt5svg5-dev
+#          packages:
+#            - qt5-qmake
+#            - qtbase5-dev
+#            - qt5-default
+#            - libqt5core5a
+#            - libqt5widgets5
+#            - libqt5opengl5-dev
+#            - libqt5svg5-dev
 #    - os: linux
 #      dist: trusty
 #      sudo: required
@@ -31,9 +31,9 @@ matrix:
 
 # check environment (copied from libgit2sharp)
 before_install:
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  - sudo add-apt-repository ppa:beineri/opt-qt551-trusty -y
-  - sudo apt-get update -qq
+#  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+#  - sudo add-apt-repository ppa:beineri/opt-qt551-trusty -y
+#  - sudo apt-get update -qq
   - date -u
   - uname -a
 
@@ -42,5 +42,5 @@ script:
 #  - sudo apt-file update
 #  - sudo apt-file search Qt5CoreConfig.cmake
   - cd bin
-  - cmake -DBUILD_TESTING:BOOL=OFF -DBUILD_DOCUMENTATION:BOOL=OFF -DBUILD_MOSAIC_TOOLS:BOOL=OFF -DBUILD_LARGE_VOLUME_TOOLS:BOOL=OFF -DQt5_PATH:PATH=/usr/lib/x86_64-linux-gnu ../Superbuild
+  - cmake -DBUILD_TESTING:BOOL=OFF -DSEG3D_BUILD_INTERFACE:BOOL=OFF -DBUILD_DOCUMENTATION:BOOL=OFF -DBUILD_MOSAIC_TOOLS:BOOL=OFF -DBUILD_LARGE_VOLUME_TOOLS:BOOL=OFF -DQt5_PATH:PATH=/usr/lib/x86_64-linux-gnu ../Superbuild
   - make -j4 1> /dev/null
