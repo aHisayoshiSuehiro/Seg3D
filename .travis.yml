@@ -9,8 +9,8 @@ matrix:
       cache:
         directories:
           - bin/Externals
-      addons:
-        apt:
+#      addons:
+#        apt:
 #          sources:
 #            - ppa:beineri/opt-qt551-trusty
 #          packages:
