@@ -7,7 +7,7 @@ PROJECT_NAME           = @PROJECT_NAME@
 PROJECT_NUMBER         = @SEG3D_MAJOR_VERSION@.@SEG3D_MINOR_VERSION@
 PROJECT_BRIEF          = "@PROJECT_NAME@ is a free volume segmentation and processing tool developed by the NIH Center for Integrative Biomedical Computing at the University of Utah Scientific Computing and Imaging (SCI) Institute."
 PROJECT_LOGO           = @SEG3D_SOURCE_DIR@/Resources/Icons/seg3d2_128.png
-OUTPUT_DIRECTORY       = @CMAKE_CURRENT_BINARY_DIR@
+OUTPUT_DIRECTORY       = @DOXYGEN_OUTPUT_DIR@
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
 BRIEF_MEMBER_DESC      = YES
@@ -232,7 +232,7 @@ SERVER_BASED_SEARCH    = NO
 #---------------------------------------------------------------------------
 # configuration options related to the LaTeX output
 #---------------------------------------------------------------------------
-GENERATE_LATEX         = YES
+GENERATE_LATEX         = NO
 LATEX_OUTPUT           = latex
 LATEX_CMD_NAME         = latex
 MAKEINDEX_CMD_NAME     = makeindex
