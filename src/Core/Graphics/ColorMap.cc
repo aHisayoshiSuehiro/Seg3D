@@ -147,8 +147,8 @@ Texture1DHandle ColorMap::get_texture()
     this->private_->texture_.reset( new Texture1D );
     this->private_->texture_->set_min_filter( GL_LINEAR );
     this->private_->texture_->set_mag_filter( GL_LINEAR );
-    this->private_->texture_->set_image( static_cast< int >( this->get_size() ), GL_RGB, 
-      &this->private_->colors_[ 0 ], GL_RGB, GL_FLOAT );
+    this->private_->texture_->set_image( static_cast< int >( this->get_size() ), GL_RGBA,
+      &this->private_->colors_[ 0 ], GL_RGBA, GL_FLOAT );
     CORE_CHECK_OPENGL_ERROR();
     this->private_->changed_ = false;
   }

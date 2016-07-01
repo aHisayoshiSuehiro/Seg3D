@@ -155,7 +155,7 @@ void VolumeRendererOcclusionPrivate::update_disk_sample_lut()
 
   RenderResources::lock_type lock( RenderResources::GetMutex() );
   glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-  this->disk_sample_lut_->set_image( this->num_of_samples_, GL_RGB16F_ARB, &samples[ 0 ], GL_RGB, GL_FLOAT );
+  this->disk_sample_lut_->set_image( this->num_of_samples_, GL_RGB16F_ARB, &samples[ 0 ], GL_RGBA, GL_FLOAT );
 }
 
 //////////////////////////////////////////////////////////////////////////
