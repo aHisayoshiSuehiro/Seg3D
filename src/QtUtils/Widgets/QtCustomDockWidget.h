@@ -3,7 +3,7 @@
  
  The MIT License
  
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
  
  
@@ -36,9 +36,9 @@
 
 
 // QT includes
-#include <QtGui/QDockWidget>
-#include <QtGui/QCloseEvent>
-#include <QtGui/QKeyEvent>
+#include <QDockWidget>
+#include <QCloseEvent>
+#include <QKeyEvent>
 
 #endif
 
@@ -79,7 +79,8 @@ public:
 public:
   void set_enabled( bool enabled );
   
-
+protected:
+  QWidget* dock_base_;
   
 private:
   boost::shared_ptr< QtCustomDockWidgetPrivate > private_;

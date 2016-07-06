@@ -3,7 +3,7 @@
 
  The MIT License
 
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
 
 
@@ -130,6 +130,7 @@ public:
   static const int TRANSFORM_LENGTH;
 
 protected:
+  // rotation matrix
   Matrix mat_;
 };
 
@@ -219,6 +220,7 @@ public:
   static const int TRANSFORM_LENGTH;
 
 protected:
+  // rotation matrix
   MatrixF mat_;
 };
 

@@ -3,7 +3,7 @@
  
  The MIT License
  
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
  
  
@@ -31,9 +31,9 @@
 #include <boost/lambda/bind.hpp>
 
 // QT includes
-#include <QtGui/QSplitter>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QLabel>
+#include <QSplitter>
+#include <QVBoxLayout>
+#include <QLabel>
 
 // Core includes
 #include <Core/Utils/Log.h>

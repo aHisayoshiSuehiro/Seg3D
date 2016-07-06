@@ -3,7 +3,7 @@
  
  The MIT License
  
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
  
  
@@ -27,8 +27,8 @@
  */
 
 // QT includes
-#include <QtGui/QMenu>
-#include <QtGui/QScrollBar>
+#include <QMenu>
+#include <QScrollBar>
 
 // Core includes
 #include <Core/Action/Actions.h>

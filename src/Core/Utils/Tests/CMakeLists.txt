@@ -2,7 +2,7 @@
 #
 #  The MIT License
 #
-#  Copyright (c) 2015 Scientific Computing and Imaging Institute,
+#  Copyright (c) 2016 Scientific Computing and Imaging Institute,
 #  University of Utah.
 #
 #
@@ -27,6 +27,7 @@
 
 SET(Core_Utils_Tests_SRCS
   SingletonTests.cc
+  LogTests.cc
 )
 
 REGISTER_UNIT_TEST(Core_Utils_Tests

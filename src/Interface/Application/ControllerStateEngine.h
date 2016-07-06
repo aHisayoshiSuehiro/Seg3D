@@ -3,7 +3,7 @@
  
  The MIT License
  
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
  
  
@@ -39,9 +39,9 @@
 #include <string>
 
 // QT includes
-#include <QtCore/QAbstractTableModel>
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
+#include <QAbstractTableModel>
+#include <QObject>
+#include <QVariant>
 
 #endif
 
@@ -64,7 +64,7 @@ public:
   QVariant data( const QModelIndex& index, int role ) const;
   QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
-  void update() { reset(); }
+  void update() { beginResetModel(); endResetModel(); }
 };
 
 } // end namespace Seg3D

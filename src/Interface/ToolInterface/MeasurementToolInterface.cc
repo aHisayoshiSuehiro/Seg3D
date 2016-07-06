@@ -3,7 +3,7 @@
  
  The MIT License
  
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
  
  
@@ -35,7 +35,7 @@
 
 // Qt includes
 #include <QtGui/QClipboard>
-#include <QtGui/QColorDialog>
+#include <QColorDialog>
 
 // Qt Gui Includes
 #include <QtUtils/Bridge/QtBridge.h>

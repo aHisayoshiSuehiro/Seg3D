@@ -3,7 +3,7 @@
 
  The MIT License
 
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
 
 
@@ -27,9 +27,9 @@
  */
 
 // Qt includes
-#include <QtGui/QColorDialog>
+#include <QColorDialog>
 #include <QtGui/QDoubleValidator>
-#include <QtGui/QLineEdit>
+#include <QLineEdit>
 #include <QtGui/QPainter>
 
 // Interface includes

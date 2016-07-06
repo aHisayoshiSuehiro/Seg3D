@@ -3,7 +3,7 @@
 
  The MIT License
 
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
 
 
@@ -184,7 +184,7 @@ bool NrrdResampleFilter::setup_layers(const std::vector< std::string >& layer_id
           static_cast< MaskLayer* >( this->src_layers_[ i ].get() )->color_state_->get() );
         break;
       default:
-        CORE_LOG_ERROR( "Unknown volume type." );
+        CORE_LOG_ERROR( "Unsupported volume type." );
         return false;
     }
 

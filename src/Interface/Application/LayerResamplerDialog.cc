@@ -3,7 +3,7 @@
  
  The MIT License
  
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
  
  
@@ -24,10 +24,11 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  DEALINGS IN THE SOFTWARE.
- */
+*/
 
 #include <QtUtils/Bridge/QtBridge.h>
 
+#include <Interface/Application/StyleSheet.h>
 #include <Interface/Application/LayerResamplerDialog.h>
 
 #include "ui_LayerResamplerDialog.h"
@@ -48,6 +49,7 @@ LayerResamplerDialog::LayerResamplerDialog(
   private_( new LayerResamplerDialogPrivate )
 {
   this->private_->ui_.setupUi( this );
+  this->setStyleSheet( StyleSheet::LAYER_RESAMPLER_C );
 
   QtUtils::QtBridge::Connect( this->private_->ui_.padding_combobox_, layer_resampler->padding_value_state_ );
   QtUtils::QtBridge::Connect( this->private_->ui_.kernel_combobox_, layer_resampler->kernel_state_ );

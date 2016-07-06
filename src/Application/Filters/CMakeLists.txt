@@ -3,7 +3,7 @@
 # 
 #  The MIT License
 # 
-#  Copyright (c) 2015 Scientific Computing and Imaging Institute,
+#  Copyright (c) 2016 Scientific Computing and Imaging Institute,
 #  University of Utah.
 # 
 #  
@@ -49,6 +49,10 @@ SET(APPLICATION_FILTERS_SRCS
   LayerFilterNotifier.cc
   ThresholdFilter.h
   ThresholdFilter.cc
+  PadFilter.h
+  PadFilter.cc
+  SingleThresholdFilter.h
+  SingleThresholdFilter.cc
 )
 
 SET(APPLICATION_FILTERS_UTILS_SRCS
@@ -143,6 +147,8 @@ SET(APPLICATION_FILTERS_ACTIONS_SRCS
   Actions/ActionRadialBasisFunction.cc
   Actions/ActionPadFilter.h
   Actions/ActionPadFilter.cc
+  Actions/ActionSingleThreshold.h
+  Actions/ActionSingleThreshold.cc
 )
 
 IF(BUILD_WITH_PYTHON)

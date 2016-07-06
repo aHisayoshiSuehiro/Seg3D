@@ -3,7 +3,7 @@
 
  The MIT License
 
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
 
 
@@ -27,15 +27,15 @@
  */
  
 // Qt includes
-#include <QtGui/QWidget>
-#include <QtGui/QCheckBox>
-#include <QtGui/QDoubleSpinBox>
-#include <QtGui/QSpinBox>
-#include <QtGui/QComboBox>
-#include <QtGui/QToolButton>
-#include <QtGui/QPushButton>
-#include <QtGui/QLineEdit>
-#include <QtGui/QActionGroup>
+#include <QWidget>
+#include <QCheckBox>
+#include <QDoubleSpinBox>
+#include <QSpinBox>
+#include <QComboBox>
+#include <QToolButton>
+#include <QPushButton>
+#include <QLineEdit>
+#include <QActionGroup>
 
 // Core includes
 #include <Core/Interface/Interface.h>

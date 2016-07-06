@@ -3,7 +3,7 @@
  
  The MIT License
  
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
  
  
@@ -31,8 +31,8 @@
 #include <boost/thread.hpp>
 
 // Qt includes
-#include <QtGui/QDesktopWidget>
-#include <QtGui/QMessageBox>
+#include <QDesktopWidget>
+#include <QMessageBox>
 
 // Core includes
 #include <Core/Utils/Log.h>

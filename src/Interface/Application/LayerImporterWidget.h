@@ -3,7 +3,7 @@
  
  The MIT License
  
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
  
  
@@ -37,7 +37,7 @@
 
 // Qt includes
 #include <QtCore/QPointer>
-#include <QtGui/QDialog>
+#include <QDialog>
 
 // boost includes
 #include <boost/smart_ptr.hpp>

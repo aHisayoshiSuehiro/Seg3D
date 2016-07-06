@@ -3,7 +3,7 @@
 
  The MIT License
 
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
 
 
@@ -29,7 +29,7 @@
 // QtUtils includes
 #include <QCoreApplication>
 #include <QPointer>
-#include <QtGui/QWidget>
+#include <QWidget>
 
 // Core includes
 #include <Core/Interface/Interface.h>

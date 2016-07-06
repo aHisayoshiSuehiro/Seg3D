@@ -3,7 +3,7 @@
  
  The MIT License
  
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
  
  
@@ -35,8 +35,8 @@
 #include <boost/shared_ptr.hpp>
 
 // Qt includes
-#include <QtGui/QFileDialog>
-#include <QtCore/QPointer>
+#include <QFileDialog>
+#include <QPointer>
 
 // Core includes
 #include <Core/Utils/ConnectionHandler.h>

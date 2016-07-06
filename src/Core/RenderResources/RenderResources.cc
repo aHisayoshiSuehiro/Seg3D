@@ -3,7 +3,7 @@
 
  The MIT License
 
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
 
 
@@ -32,7 +32,9 @@
 #include <Windows.h>
 #endif
 #ifdef __APPLE__
-#include <AGL/agl.h>
+//#include <AGL/agl.h>
+#include <OpenGL/OpenGL.h>
+#include <ApplicationServices/ApplicationServices.h>
 #endif
 
 // boost includes
@@ -109,6 +111,7 @@ void RenderResourcesPrivate::initialize_gl()
 void RenderResourcesPrivate::query_video_memory_size()
 {
   this->vram_size_ = 0;
+  unsigned long vram_size_MB = 0;
   
 #if defined(_WIN32)
   const char HARDWARE_DEVICEMAP_VIDEO_C[] = "HARDWARE\\DEVICEMAP\\VIDEO";
@@ -165,37 +168,42 @@ void RenderResourcesPrivate::query_video_memory_size()
           reinterpret_cast< LPBYTE >( &vram_size ), &buffer_size ) == ERROR_SUCCESS )
         {
           this->vram_size_ = vram_size;
+          vram_size_MB = this->vram_size_ >> 20;
         }
         RegCloseKey( video_device_key );
       } // end for
       
-    } 
+    }
 
     RegCloseKey( video_devicemap_key );
   }
 #elif defined(__APPLE__)
-  AGLRendererInfo head_info = aglQueryRendererInfoForCGDirectDisplayIDs( NULL, 0 );
-  AGLRendererInfo info = head_info;
-  while ( info != NULL ) 
+
+  CGLRendererInfoObj info;
+  GLint infoCount = 0;
+
+  CGLError e = CGLQueryRendererInfo( CGDisplayIDToOpenGLDisplayMask( CGMainDisplayID() ), &info, &infoCount );
+  if (e != kCGLNoError)
   {
-    int accelerated;
-    if ( aglDescribeRenderer( info, AGL_ACCELERATED, &accelerated ) && accelerated )
-    {
-      int vram_size;
-      if ( aglDescribeRenderer( info, AGL_VIDEO_MEMORY, &vram_size ) &&
-        vram_size > 0 ) 
-      {
-        this->vram_size_ = static_cast< unsigned long >( vram_size );
-        break;
-      }
-    }
-    info = aglNextRendererInfo( info );
+    CORE_LOG_WARNING( CGLErrorString(e) );
   }
-  aglDestroyRendererInfo( head_info );
+
+  for (int i = 0; i < infoCount; ++i)
+  {
+    GLint vram_size = 0;
+    CGLDescribeRenderer(info, i, kCGLRPVideoMemoryMegabytes, &vram_size);
+    if ( vram_size > 0 && vram_size > this->vram_size_ )
+    {
+      vram_size_MB = static_cast< unsigned long >( vram_size );
+      this->vram_size_ = vram_size_MB << 20;
+    }
+  }
+  CGLDestroyRendererInfo(info);
+
 #else
   // TODO: Add support for Linux
 #endif
-  
+
   if ( this->vram_size_ == 0 ) 
   {
     CORE_LOG_WARNING( "Failed to query video memory size." );
@@ -204,8 +212,7 @@ void RenderResourcesPrivate::query_video_memory_size()
   }
   else 
   {
-    CORE_LOG_MESSAGE( "Video Memory Size: " + 
-             ExportToString( this->vram_size_ >> 20 ) + "MB." );
+    CORE_LOG_MESSAGE( "Video Memory Size: " + ExportToString( vram_size_MB ) + " MB." );
   }
 }
 
@@ -222,9 +229,6 @@ RenderResources::~RenderResources()
 void RenderResources::initialize_eventhandler()
 {
   boost::unique_lock< boost::mutex > lock( this->private_->thread_mutex_ );
-  this->private_->delete_context_->make_current();
-  this->private_->initialize_gl();
-  this->private_->query_video_memory_size();
   this->private_->thread_condition_variable_.notify_one();
 }
 
@@ -269,11 +273,11 @@ void RenderResources::install_resources_context( RenderResourcesContextHandle re
   
   this->private_->resources_context_ = resources_context;
 
-  // Create GL context for the event handler thread and start it
-  this->private_->resources_context_->create_render_context( this->private_->delete_context_ );
+  // Start the event handler thread and then create the GL context
   boost::unique_lock< boost::mutex > lock( this->private_->thread_mutex_ );
   this->start_eventhandler();
   this->private_->thread_condition_variable_.wait( lock );
+  this->initialize_on_event_thread();
 }
 
 bool RenderResources::valid_render_resources()
@@ -282,6 +286,22 @@ bool RenderResources::valid_render_resources()
          this->private_->resources_context_->valid_render_resources() && 
          this->private_->delete_context_ &&
          this->private_->gl_capable_ );
+}
+
+void RenderResources::initialize_on_event_thread()
+{
+  if (!this->is_eventhandler_thread())
+  {
+    this->post_event( boost::bind( &RenderResources::initialize_on_event_thread, this ) );
+    return;
+  }
+
+  boost::unique_lock< boost::mutex > lock( this->private_->thread_mutex_ );
+  this->private_->resources_context_->create_render_context( this->private_->delete_context_ );
+  this->private_->delete_context_->make_current();
+  this->private_->initialize_gl();
+  this->private_->query_video_memory_size();
+
 }
 
 void RenderResources::delete_texture( unsigned int texture_id )

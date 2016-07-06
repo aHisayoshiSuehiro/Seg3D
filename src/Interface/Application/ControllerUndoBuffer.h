@@ -3,7 +3,7 @@
  
  The MIT License
  
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
  
  
@@ -41,9 +41,9 @@
 #include <deque>
 
 // QT includes
-#include <QtCore/QAbstractTableModel>
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
+#include <QAbstractTableModel>
+#include <QObject>
+#include <QVariant>
 
 // Core includes
 #include <Core/Utils/Log.h>
@@ -71,7 +71,7 @@ public:
 
   void add_log_entry( int message_type, std::string& message );
 
-  void update() { reset(); }
+  void update() { beginResetModel(); endResetModel(); }
 };
 
 } // end namespace Seg3D

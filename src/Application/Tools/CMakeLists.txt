@@ -3,7 +3,7 @@
 # 
 #  The MIT License
 # 
-#  Copyright (c) 2015 Scientific Computing and Imaging Institute,
+#  Copyright (c) 2016 Scientific Computing and Imaging Institute,
 #  University of Utah.
 # 
 #  
@@ -123,11 +123,15 @@ SET(APPLICATION_TOOLS_SRCS
   SpeedlineTool.cc
   PointsSelectTool.h
   PointsSelectTool.cc
+  PadTool.h
+  PadTool.cc
   #RadialBasisFunctionTool.h
   #RadialBasisFunctionTool.cc
 )
 
 SET(APPLICATION_TOOLS_NOREGISTER_SRCS
+  SliceRange.h
+  SliceRange.cc
   detail/MaskShader.h
   detail/MaskShader.cc
 )

@@ -3,7 +3,7 @@
  
  The MIT License
  
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
  
  
@@ -40,6 +40,8 @@
 #include <QDragEnterEvent>
 #include <QDragLeaveEvent>
 #include <QDropEvent>
+#include <QtCore/QMimeData>
+#include <QtGui/QDrag>
 
 //Core Includes - for logging
 #include <Core/Utils/Log.h>
@@ -68,7 +70,6 @@
 #include <Application/LayerIO/LayerIO.h>
 #include <Application/LayerIO/Actions/ActionExportLayer.h>
 #include <Application/LayerIO/Actions/ActionExportSegmentation.h>
-#include <Application/LayerIO/Actions/ActionExportIsosurface.h>
 #include <Application/PreferencesManager/PreferencesManager.h>
 #include <Application/Filters/LayerResampler.h>
 #include <Application/ProjectManager/ProjectManager.h>
@@ -80,6 +81,8 @@
 #include <Interface/Application/DropSpaceWidget.h>
 #include <Interface/Application/OverlayWidget.h>
 #include <Interface/Application/LayerResamplerDialog.h>
+#include <Interface/Application/LayerIOFunctions.h>
+
 
 //UI Includes
 #include "ui_LayerWidget.h"
@@ -129,10 +132,6 @@ public:
   // EXPORT_LAYER:
   // function that checks the type of the layer and calls the appropriate function to export the layer  
   void export_layer( const std::string& type_extension );
-
-  // EXPORT_ISOSURFACE
-  // function that exports an isosurface
-  void export_isosurface();
 
   // SET_DROP_TARGET:
   // this function is for keeping track of which layer the drop is going to happen on
@@ -213,33 +212,6 @@ void LayerWidgetPrivate::update_appearance( bool locked, bool active, bool in_us
   this->active_ = active;
   this->in_use_ = in_use;
 
-  // Update the background color inside the icon
-  switch( this->get_volume_type() )
-  {
-
-    case Core::VolumeType::LARGE_DATA_E:
-    case Core::VolumeType::DATA_E:
-    {
-      if ( locked )
-      {
-        this->ui_.type_->setStyleSheet( 
-          StyleSheet::LAYER_WIDGET_BACKGROUND_LOCKED_C );
-      }
-      else
-      {
-        this->ui_.type_->setStyleSheet( StyleSheet::DATA_VOLUME_COLOR_C );
-      }
-    }
-    break;
-    case Core::VolumeType::MASK_E:
-    {
-      int color_index =  dynamic_cast< MaskLayer* >( 
-        this->layer_.get() )->color_state_->get();
-      this->parent_->set_mask_background_color( color_index );
-    }
-    break;
-  }
-
   if ( locked )
   {
     this->ui_.base_->setStyleSheet( StyleSheet::LAYER_WIDGET_BASE_LOCKED_C );
@@ -249,29 +221,21 @@ void LayerWidgetPrivate::update_appearance( bool locked, bool active, bool in_us
   {
     this->ui_.base_->setStyleSheet( StyleSheet::LAYER_WIDGET_BASE_ACTIVE_C );  
     this->ui_.label_->setStyleSheet( StyleSheet::LAYER_WIDGET_LABEL_ACTIVE_C );
-    if ( this->layer_->gui_state_group_->get_enabled() )
-      this->ui_.header_->setStyleSheet( StyleSheet::LAYER_WIDGET_HEADER_ACTIVE_C );
   }
   else if ( active && in_use )
   {
     this->ui_.base_->setStyleSheet( StyleSheet::LAYER_WIDGET_BASE_ACTIVE_IN_USE_C );  
     this->ui_.label_->setStyleSheet( StyleSheet::LAYER_WIDGET_LABEL_ACTIVE_IN_USE_C );
-    if ( this->layer_->gui_state_group_->get_enabled() )
-      this->ui_.header_->setStyleSheet( StyleSheet::LAYER_WIDGET_HEADER_ACTIVE_IN_USE_C );
   }
   else if ( in_use )
   {
     this->ui_.base_->setStyleSheet( StyleSheet::LAYER_WIDGET_BASE_IN_USE_C );  
     this->ui_.label_->setStyleSheet( StyleSheet::LAYER_WIDGET_LABEL_IN_USE_C );
-    if ( this->layer_->gui_state_group_->get_enabled() )
-      this->ui_.header_->setStyleSheet( StyleSheet::LAYER_WIDGET_HEADER_IN_USE_C );
   }
   else
   {
     this->ui_.base_->setStyleSheet( StyleSheet::LAYER_WIDGET_BASE_INACTIVE_C );
     this->ui_.label_->setStyleSheet( StyleSheet::LAYER_WIDGET_LABEL_INACTIVE_C );
-    if ( this->layer_->gui_state_group_->get_enabled() )
-      this->ui_.header_->setStyleSheet( StyleSheet::LAYER_WIDGET_HEADER_INACTIVE_C );
   }
 }
 
@@ -413,37 +377,6 @@ void LayerWidgetPrivate::export_layer( const std::string& type_extension )
   }
 }
 
-
-void LayerWidgetPrivate::export_isosurface()
-{
-
-  MaskLayer* mask_layer = dynamic_cast< MaskLayer* >( this->layer_.get() );
-  if ( ! mask_layer->iso_generated_state_->get() )
-  {
-    QMessageBox message_box;
-    message_box.setWindowTitle( "Export Isosurface Error" );
-    message_box.addButton( QMessageBox::Ok );
-    message_box.setIcon( QMessageBox::Critical );
-    message_box.setText( "Isosurface must be created before it can be exported." );
-    message_box.exec();
-    return;
-  }
-
-  QString filename;
-  boost::filesystem::path current_folder = ProjectManager::Instance()->get_current_file_folder();  
-
-  filename = QFileDialog::getSaveFileName( this->parent_,
-    tr("Export Isosurface As... "), QString::fromStdString( current_folder.string() ),
-    QString::fromStdString( Core::Isosurface::EXPORT_FORMATS_C ) );
-
-  if ( filename.isEmpty() ) return;
-
-  ActionExportIsosurface::Dispatch( Core::Interface::GetWidgetActionContext(), 
-    this->layer_->get_layer_id(), filename.toStdString(), this->layer_->name_state_->get() );
-
-}
-
-
 void LayerWidgetPrivate::UpdateViewerButtons( qpointer_type qpointer, std::string layout )
 {
   if( !( Core::Interface::IsInterfaceThread() ) )
@@ -556,11 +489,11 @@ LayerWidget::LayerWidget( QFrame* parent, LayerHandle layer ) :
   // Store the icons in the private class, so they only need to be generated once
   this->private_->label_layer_icon_.addFile( QString::fromUtf8( ":/Images/LabelMapWhite.png" ),
     QSize(), QIcon::Normal, QIcon::Off );
-  this->private_->data_layer_icon_.addFile( QString::fromUtf8( ":/Images/DataWhite.png" ), 
+  this->private_->data_layer_icon_.addFile( QString::fromUtf8( ":/Palette_Icons/layers.png" ), 
     QSize(), QIcon::Normal, QIcon::Off );
-  this->private_->mask_layer_icon_.addFile( QString::fromUtf8( ":/Images/MaskWhite_shadow.png" ), 
+  this->private_->mask_layer_icon_.addFile( QString::fromUtf8( ":/Palette_Icons/mask_transparent.png" ), 
     QSize(), QIcon::Normal, QIcon::Off );
-  this->private_->large_data_layer_icon_.addFile( QString::fromUtf8( ":/Images/LargeWhite.png" ), 
+  this->private_->large_data_layer_icon_.addFile( QString::fromUtf8( ":/Palette_Icons/windowed.png" ), 
     QSize(), QIcon::Normal, QIcon::Off );
 
   // Update the style sheet of this widget
@@ -569,27 +502,15 @@ LayerWidget::LayerWidget( QFrame* parent, LayerHandle layer ) :
 
   // Add the Ui children onto the QWidget
   this->private_->ui_.setupUi( this );
-  
-#ifdef __APPLE__
-  QList<QLabel*> children = findChildren< QLabel* >();
-  QList<QLabel*>::iterator it = children.begin();
-  QList<QLabel*>::iterator it_end = children.end();
-  
-  while( it != it_end )
-  {
-    QFont font = ( *it )->font();
-    font.setPointSize( 11 );
-    ( *it )->setFont( font );
-    ++it;
-  }
-#endif  
-  
-  
+
+  this->setProperty( StyleSheet::PALETTE_BACKGROUND_PROPERTY_C, true );
+  this->setStyleSheet( StyleSheet::LAYERWIDGET_C );
+
   this->setUpdatesEnabled( false );
-  
+
   // set some Drag and Drop stuff
   this->setAcceptDrops( true );
-  
+
   // Set the defaults
   // this is a default setting until we can get the name of the layer from the file or by some other means
   this->private_->ui_.label_->setText( QString::fromStdString( layer->name_state_->get() ) );
@@ -620,13 +541,10 @@ LayerWidget::LayerWidget( QFrame* parent, LayerHandle layer ) :
   this->private_->activate_button_ = new PushDragButton( this->private_->ui_.typeGradient_ );
   this->private_->activate_button_->setObjectName( QString::fromUtf8( "activate_button_" ) );
   this->private_->activate_button_->setStyleSheet( StyleSheet::LAYER_PUSHDRAGBUTTON_C );
-  this->private_->activate_button_->setMinimumHeight( 37 );
-  this->private_->activate_button_->setMinimumWidth( 29 );
-  this->private_->activate_button_->setIconSize( QSize( 25, 25 ) );
-  this->private_->ui_.horizontalLayout_9->setContentsMargins( 1, 0, 1, 0 );
+  this->private_->ui_.horizontalLayout_9->setContentsMargins( 0, 0, 0, 0 );
   this->private_->ui_.horizontalLayout_9->addWidget( this->private_->activate_button_ );
   this->private_->activate_button_->setAcceptDrops( false );
-  
+ 
   // add the DropSpaceWidget
   this->private_->drop_space_ = new DropSpaceWidget( this );
   this->private_->ui_.verticalLayout_10->insertWidget( 0, this->private_->drop_space_ );
@@ -635,7 +553,8 @@ LayerWidget::LayerWidget( QFrame* parent, LayerHandle layer ) :
   this->private_->color_widget_ = new QtUtils::QtColorBarWidget( this );
   this->private_->ui_.horizontalLayout_14->addWidget( this->private_->color_widget_ );
   this->private_->color_widget_->setObjectName( QString::fromUtf8( "color_widget_" ) );
-        
+  this->private_->activate_button_->setIconSize( QSize(38, 43) );
+    
   this->connect( this->private_->ui_.abort_button_,
     SIGNAL ( pressed() ), this, SLOT( trigger_abort() ) );
 
@@ -1040,7 +959,7 @@ LayerWidget::LayerWidget( QFrame* parent, LayerHandle layer ) :
   this->private_->overlay_->hide(); 
   this->private_->ui_.facade_widget_->hide();
   this->private_->ui_.verticalLayout_3->setAlignment( Qt::AlignBottom );
-  
+
   this->private_->update_widget_state( true );
   this->setUpdatesEnabled( true );
 }
@@ -1096,11 +1015,13 @@ void LayerWidget::set_mask_background_color( int color_index )
   int b = static_cast< int >( color.b() );
 
   QString style_sheet = QString::fromUtf8( 
-  "background-color: rgb(" ) + QString::number( r ) +
+  "QWidget#type_{ background-color: rgb(" ) + QString::number( r ) +
   QString::fromUtf8( ", " ) + QString::number( g ) +
   QString::fromUtf8( ", " ) + QString::number( b ) +
-  QString::fromUtf8( ");" );
-
+  QString::fromUtf8( ");"
+      " padding: 5px;"
+      " background-clip: content;"
+"}" );
   this->private_->ui_.type_->setStyleSheet( style_sheet );
 }
 
@@ -1321,7 +1242,7 @@ void LayerWidget::prep_for_animation( bool move_time )
   if( move_time )
   {
     this->private_->ui_.facade_widget_->setMinimumSize( this->private_->ui_.base_->size() );
-    this->private_->ui_.facade_widget_->setPixmap( QPixmap::grabWidget( this ) );
+    this->private_->ui_.facade_widget_->setPixmap( this->grab() );
     this->private_->ui_.base_->hide();
     this->private_->ui_.facade_widget_->show();
   }
@@ -1423,6 +1344,12 @@ void LayerWidget::contextMenuEvent( QContextMenuEvent * event )
     qaction = export_menu->addAction( tr( "MRC" ) );
     connect( qaction, SIGNAL( triggered() ), this, SLOT( export_mrc() ) );
 
+    qaction = export_menu->addAction( tr( "NIFTI" ) );
+    connect( qaction, SIGNAL( triggered() ), this, SLOT( export_nifti() ) );
+
+    qaction = export_menu->addAction( tr( "COMPRESSED NIFTI" ) );
+    connect( qaction, SIGNAL( triggered() ), this, SLOT( export_compressed_nifti() ) );
+
     menu.addMenu( export_menu );
   }
 
@@ -1492,9 +1419,19 @@ void LayerWidget::export_png()
   this->private_->export_layer( ".png" );
 }
 
+void LayerWidget::export_nifti()
+{
+  this->private_->export_layer( ".nii" );
+}
+
+void LayerWidget::export_compressed_nifti()
+{
+  this->private_->export_layer( ".nii.gz" );
+}
+
 void LayerWidget::export_isosurface()
 {
-  this->private_->export_isosurface();
+  LayerIOFunctions::ExportIsosurface( this->private_->parent_, this->private_->layer_ );
 }
 
 } //end namespace Seg3D

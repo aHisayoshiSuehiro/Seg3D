@@ -3,7 +3,7 @@
  
  The MIT License
  
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
  
  
@@ -32,10 +32,10 @@
 #ifndef Q_MOC_RUN
 
 // QT Includes
-#include <QtGui/QWidget>
-#include <QtGui/QDragEnterEvent>
-#include <QtGui/QDragLeaveEvent>
-#include <QtGui/QDropEvent>
+#include <QWidget>
+#include <QDragEnterEvent>
+#include <QDragLeaveEvent>
+#include <QDropEvent>
 #include <QtCore/QPointer>
 
 #include <Application/Layer/LayerGroup.h>

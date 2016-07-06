@@ -3,7 +3,7 @@
  
  The MIT License
  
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
  
  
@@ -30,8 +30,9 @@
 #include <boost/lexical_cast.hpp>
 
 // Qt includes
-#include <QtGui/QMessageBox>
+#include <QMessageBox>
 #include <QtCore/QPropertyAnimation>
+#include <QtCore/QMimeData>
 
 //Core Includes - for logging
 #include <Core/Utils/Log.h>
@@ -40,8 +41,8 @@
 #include <QtUtils/Bridge/QtBridge.h>
 
 //Interface Includes
-#include <Interface/Application/GroupButtonMenu.h>
 #include <Interface/Application/StyleSheet.h>
+#include <Interface/Application/GroupButtonMenu.h>
 #include <Interface/Application/DropSpaceWidget.h>
 #include <Interface/Application/OverlayWidget.h>
 #include <Interface/Application/LayerWidget.h>
@@ -72,6 +73,9 @@ GroupButtonMenu::GroupButtonMenu( QWidget* parent, LayerGroupHandle group ) :
   private_( new GroupButtonMenuPrivate )
 { 
   this->private_->ui_.setupUi( this );
+
+  this->setProperty(StyleSheet::PALETTE_BACKGROUND_PROPERTY_C, true);
+  this->private_->ui_.background_->setStyleSheet(StyleSheet::GROUP_MENUBAR_C);
   
   // Set up the Drag and Drop
   this->setAcceptDrops( true );
@@ -155,7 +159,6 @@ GroupButtonMenu::GroupButtonMenu( QWidget* parent, LayerGroupHandle group ) :
   this->private_->overlay_ = new OverlayWidget( this ); 
   this->private_->overlay_->hide();
   
-  this->setStyleSheet( StyleSheet::GROUP_MENUBAR_C );
 }
 
 GroupButtonMenu::~GroupButtonMenu()
@@ -234,8 +237,7 @@ void GroupButtonMenu::prep_for_animation( bool move_time )
   if( move_time )
   {
     this->private_->ui_.facade_->setMinimumSize( this->private_->ui_.group_tools_->size() );
-    this->private_->ui_.facade_->setPixmap( 
-      QPixmap::grabWidget( this->private_->ui_.group_tools_ ) );
+    this->private_->ui_.facade_->setPixmap( this->private_->ui_.group_tools_->grab() );
     this->private_->ui_.group_tools_->hide();
     this->private_->ui_.facade_->show();
   }

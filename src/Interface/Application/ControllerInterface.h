@@ -3,7 +3,7 @@
 
  The MIT License
 
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
 
 
@@ -39,14 +39,14 @@
 #include <boost/shared_ptr.hpp>
 
 // QT includes
-#include <QtCore/QPointer>
+#include <QPointer>
 #include <QtUtils/Widgets/QtCustomDialog.h>
-#include <QtGui/QTabWidget>
-#include <QtGui/QPushButton>
-#include <QtGui/QLineEdit>
-#include <QtGui/QLabel>
-#include <QtGui/QTableView>
-#include <QtCore/QPointer>
+#include <QTabWidget>
+#include <QPushButton>
+#include <QLineEdit>
+#include <QLabel>
+#include <QTableView>
+#include <QPointer>
 
 // Core includes
 #include <Core/Utils/ConnectionHandler.h>

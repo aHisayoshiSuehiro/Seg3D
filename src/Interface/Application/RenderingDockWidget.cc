@@ -3,7 +3,7 @@
  
  The MIT License
  
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
  
  
@@ -79,6 +79,7 @@ RenderingDockWidget::RenderingDockWidget( QWidget *parent ) :
 {
   // Set up the private internals of the LayerManagerInterface class
   this->private_->ui_.setupUi( this );
+  this->private_->ui_.dockWidgetContents->setStyleSheet( StyleSheet::RENDERINGWIDGET_C );
   this->private_->ui_.dock_widget_layout_->setAlignment( Qt::AlignTop );
   this->private_->ui_.scroll_area_layout_->setAlignment( Qt::AlignTop );
   this->private_->ui_.feature_control_layout_->setAlignment( Qt::AlignTop );

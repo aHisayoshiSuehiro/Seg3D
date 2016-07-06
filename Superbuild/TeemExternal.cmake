@@ -2,7 +2,7 @@
 # 
 #  The MIT License
 # 
-#  Copyright (c) 2015 Scientific Computing and Imaging Institute,
+#  Copyright (c) 2016 Scientific Computing and Imaging Institute,
 #  University of Utah.
 # 
 #  
@@ -41,6 +41,7 @@ ExternalProject_Add(Teem_external
     -DCMAKE_VERBOSE_MAKEFILE:BOOL=${CMAKE_VERBOSE_MAKEFILE}
     -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
     -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON
+    -DDO_ZLIB_MANGLE:BOOL=${DO_ZLIB_MANGLE}
     -DZlib_DIR:PATH=${Zlib_DIR}
     -DLibPNG_DIR:PATH=${LibPNG_DIR}
     -DTeem_USE_NRRD_INTERNALS:BOOL=ON

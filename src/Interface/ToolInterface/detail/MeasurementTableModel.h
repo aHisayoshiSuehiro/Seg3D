@@ -3,7 +3,7 @@
 
  The MIT License
 
- Copyright (c) 2015 Scientific Computing and Imaging Institute,
+ Copyright (c) 2016 Scientific Computing and Imaging Institute,
  University of Utah.
 
 
@@ -34,7 +34,7 @@
 // QT Includes
 #include <QtCore/QAbstractTableModel>
 #include <QtCore/QModelIndex>
-#include <QtGui/QItemSelection>
+#include <QItemSelection>
 
 // Application includes
 #include <Application/Tools/MeasurementTool.h>

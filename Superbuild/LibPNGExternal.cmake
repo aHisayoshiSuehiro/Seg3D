@@ -2,7 +2,7 @@
 # 
 #  The MIT License
 # 
-#  Copyright (c) 2015 Scientific Computing and Imaging Institute,
+#  Copyright (c) 2016 Scientific Computing and Imaging Institute,
 #  University of Utah.
 # 
 #  
@@ -42,6 +42,7 @@ ExternalProject_Add(LibPNG_external
     -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
     -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON
     -DPNG_STATIC:BOOL=ON
+    -DDO_ZLIB_MANGLE:BOOL=${DO_ZLIB_MANGLE}
     -DZlib_DIR:PATH=${Zlib_DIR}
 )
 
